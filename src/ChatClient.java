@@ -10,7 +10,7 @@ public class ChatClient
     {
         try
         {
-            socket = new Socket("tvjaof.selfhost.bz", 9999);
+            socket = new Socket("localhost", 9999);
             socket.connect();
 
             new ChatClientThread(this, socket).start();
