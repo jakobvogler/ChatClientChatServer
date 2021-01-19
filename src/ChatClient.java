@@ -10,6 +10,7 @@ public class ChatClient
     {
         try
         {
+            run = true;
             socket = new Socket("localhost", 9999);
             socket.connect();
 
@@ -23,9 +24,8 @@ public class ChatClient
     public void start()
     {
         Scanner sc = new Scanner(System.in);
-        String input;
 
-        while (true)
+        while (run)
         {
             try {
                 socket.write(sc.nextLine() + "\n");

@@ -20,8 +20,6 @@ public class ChatServerThread extends Thread
     {
         String input;
 
-        chatroom.getClients().add(this);
-
         while (true)
         {
             input = "";
@@ -37,40 +35,22 @@ public class ChatServerThread extends Thread
 
             if (input.length() > 0 && input.split(" ").length == 1)
             {
-                nickname = input;
+                if (!chatSystem.getNicknames().contains(input))
+                {
+                    nickname = input;
+                    chatSystem.addClient(this);
+                    chatroom.getClients().add(this);
+                    receiveMessage("\n> connected\n");
+                    System.out.println("> " + nickname + " joined");
+                    System.out.println("> Active Users: " + chatSystem.getClients().size());
+                    break;
+                }
 
-                try
-                {
-                    socket.write("\n> connected\n\n");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-
-                break;
-            }
-            else if (chatSystem.getNicknames().contains(input))
-            {
-                try
-                {
-                    socket.write("\n> nickname already taken try again\n\n");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+                receiveMessage("\n> nickname already taken try again\n");
             }
             else
             {
-                try
-                {
-                    socket.write("\n> wrong format try again\n\n");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+                receiveMessage("\n> wrong format try again\n");
             }
         }
 
@@ -158,6 +138,10 @@ public class ChatServerThread extends Thread
     private void sendMessage(String message)
     {
         chatSystem.sendMessageToRoom(this, message, chatroom);
+
+        if (chatroom.getRoomName().equals("main")) {
+            System.out.println("[" + nickname + "] " + message);
+        }
     }
 
     private void listUsers()
@@ -224,6 +208,9 @@ public class ChatServerThread extends Thread
     private void exitChat()
     {
         receiveMessage(chatSystem.exitChat(this));
+
+        System.out.println("> " + nickname + " left");
+        System.out.println("> Active Users: " + chatSystem.getClients().size());
 
         run = false;
         try

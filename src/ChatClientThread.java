@@ -14,14 +14,14 @@ public class ChatClientThread extends Thread
 
     public void run()
     {
-        while (true)
+        while (run)
         {
             try {
                 String input = socket.readLine();
 
                 System.out.println(input);
 
-                if (input.equals("\n> chat closed\n"))
+                if (input.equals("> chat closed"))
                 {
                     chatClient.setRun(false);
                     run = false;

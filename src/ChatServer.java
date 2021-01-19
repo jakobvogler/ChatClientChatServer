@@ -26,8 +26,10 @@ public class ChatServer
         while (true)
         {
             try {
-                chatSystem.addClient(new ChatServerThread(chatSystem, chatSystem.getMainRoom(), ss.accept()));
-                chatSystem.getClients().get(chatSystem.getClients().size()-1).start();
+                ChatServerThread temp = new ChatServerThread(chatSystem, chatSystem.getMainRoom(), ss.accept());
+                temp.start();
+                //chatSystem.addClient(new ChatServerThread(chatSystem, chatSystem.getMainRoom(), ss.accept()));
+                //chatSystem.getClients().get(chatSystem.getClients().size()-1).start();
             }
             catch (IOException e)
             {
